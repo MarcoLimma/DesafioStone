@@ -29,22 +29,5 @@ namespace DesafioStoneTemperatura.Data
             : base(nameOrConnectionString)
         {
         }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Temperature>()
-                .HasKey(c => new { c.Id, c.CityId });
-
-            modelBuilder.Entity<Temperature>()
-                .Property(c => c.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            modelBuilder.Entity<City>().HasMany(p => p.Temperatures)
-                .WithRequired()
-                .HasForeignKey(c => c.CityId)
-                .WillCascadeOnDelete();
-
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

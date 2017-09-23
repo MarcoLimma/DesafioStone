@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using DesafioStoneTemperatura.Data;
 using DesafioStoneTemperatura.Data.Repositories;
 using DesafioStoneTemperatura.Domain.Models;
+using DesafioStoneTemperatura.TaskTemperature.Helpers;
 
 namespace DesafioStoneTemperatura.TaskTemperature
 {
@@ -24,7 +21,7 @@ namespace DesafioStoneTemperatura.TaskTemperature
             {
                 foreach (var city in cities)
                 {
-                    hgbrasil temperatureApi = new hgbrasil();
+                    WeatherApiHelper temperatureApi = new WeatherApiHelper();
                     Temperature temperature = temperatureApi.GetTemperature(city);
 
                     temperatureRepo.Add(temperature);

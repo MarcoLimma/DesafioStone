@@ -50,13 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201709230221272_first.cs" />
-    <Compile Include="Migrations\201709230221272_first.Designer.cs">
-      <DependentUpon>201709230221272_first.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709230515408_second.cs" />
-    <Compile Include="Migrations\201709230515408_second.Designer.cs">
-      <DependentUpon>201709230515408_second.cs</DependentUpon>
+    <Compile Include="Migrations\201709230713572_first.cs" />
+    <Compile Include="Migrations\201709230713572_first.Designer.cs">
+      <DependentUpon>201709230713572_first.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,11 +70,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709230221272_first.resx">
-      <DependentUpon>201709230221272_first.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709230515408_second.resx">
-      <DependentUpon>201709230515408_second.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709230713572_first.resx">
+      <DependentUpon>201709230713572_first.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

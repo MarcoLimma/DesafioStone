@@ -76,13 +76,25 @@ namespace DesafioStoneTemperatura.Data.Repositories
 
             if (city != null)
             {
-                //Fiz assim por que teociramente desse jeito os registros sem 'pai' serão apagados mais rapidamente do que ter que remover um a um
-                city.Temperatures.Clear();
-                context.Entry(city).State = EntityState.Modified;
-                //context.Temperatures.RemoveRange(city.Temperatures);
+                context.Temperatures.RemoveRange(city.Temperatures);
                 context.SaveChanges();
             }
 
+        }
+
+
+        public object GetLatestByTemperatureRegistered(int page)
+        {
+            int pageSize = 10;
+
+            object cities = context.Temperatures.OrderByDescending(t => t.Date).Select(t => t.City).Distinct().Take(pageSize)
+                .Select( c => new
+                {
+                    city = c.Name,
+                    temperature = c.Temperatures.OrderByDescending(t => t.Date).Select( t => t.Value).FirstOrDefault()
+                }).OrderByDescending(t => t.temperature).ToList();
+
+            return cities;
         }
 
     }

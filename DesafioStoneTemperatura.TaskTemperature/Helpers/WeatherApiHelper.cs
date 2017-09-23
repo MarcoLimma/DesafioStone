@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using DesafioStoneTemperatura.Domain.Models;
 
-namespace DesafioStoneTemperatura.TaskTemperature
+namespace DesafioStoneTemperatura.TaskTemperature.Helpers
 {
-    public class hgbrasil
+    public class WeatherApiHelper
     {
         public Temperature GetTemperature(City city)
         {
             try
             {
-                string url = "https://api.hgbrasil.com/weather/?format=json&city_name=" + city.Name;
+                string url = String.Format("https://api.hgbrasil.com/weather/?format=json&city_name={0}&key=0646d698", city.Name);
 
                 WebRequest request = WebRequest.Create(url);
                 WebResponse response = request.GetResponse();
@@ -33,13 +29,13 @@ namespace DesafioStoneTemperatura.TaskTemperature
                 //ToDo: Tratar o caso de nao ter a cidade na API de clima
                 var results = responseObject["results"];
 
-                var temp = ((Dictionary<string, object>)results)["temp"];
+                var temperature = ((Dictionary<string, object>)results)["temp"];
 
                 Console.WriteLine(responseFromServer);
                 reader.Close();
                 response.Close();
 
-                return new Temperature((int)temp, city.Id);
+                return new Temperature((int)temperature, city.Id);
 
             }
             catch (Exception e)
