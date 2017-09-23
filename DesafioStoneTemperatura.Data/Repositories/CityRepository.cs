@@ -52,6 +52,7 @@ namespace DesafioStoneTemperatura.Data.Repositories
             return context.Cities.FirstOrDefault(city => city.Name == name);
         }
 
+        //ToDo: Criar modelos para serem  retornados no lugar de objects
         public object GetTemperatures(string name)
         {
             var city = context.Cities.FirstOrDefault(c => c.Name == name);
@@ -87,12 +88,13 @@ namespace DesafioStoneTemperatura.Data.Repositories
         {
             int pageSize = 10;
 
-            object cities = context.Temperatures.OrderByDescending(t => t.Date).Select(t => t.City).Distinct().Take(pageSize)
+            object cities = context.Temperatures.OrderByDescending(t => t.Date).Select(t => t.City).Distinct()
                 .Select( c => new
                 {
                     city = c.Name,
                     temperature = c.Temperatures.OrderByDescending(t => t.Date).Select( t => t.Value).FirstOrDefault()
-                }).OrderByDescending(t => t.temperature).ToList();
+                }).OrderByDescending(t => t.temperature).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
 
             return cities;
         }

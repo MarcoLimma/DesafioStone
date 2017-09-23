@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace DesafioStoneTemperatura.Helpers
 {
@@ -21,9 +22,7 @@ namespace DesafioStoneTemperatura.Helpers
                 StreamReader reader = new StreamReader(dataStream);
                 string responseFromServer = reader.ReadToEnd();
 
-                //ToDo: Testar a velocidade dos conversores de json
-                JavaScriptSerializer j = new JavaScriptSerializer();
-                var responseObject = j.Deserialize<Dictionary<string, string>>(responseFromServer);
+                var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseFromServer);
 
                 return responseObject["localidade"] ?? "";
             }

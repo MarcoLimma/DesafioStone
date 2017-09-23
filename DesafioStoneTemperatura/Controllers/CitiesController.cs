@@ -20,7 +20,6 @@ namespace DesafioStoneTemperatura.Controllers
             this.cityRepo = new CityRepository(context);
         }
 
-
         [HttpGet]
         [Route("cities/{name}/temperatures")]
         // GET /cities/{name}/temperature
