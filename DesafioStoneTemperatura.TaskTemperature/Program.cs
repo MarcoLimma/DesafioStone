@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using DesafioStoneTemperatura.Data;
 using DesafioStoneTemperatura.Data.Repositories;
-using DesafioStoneTemperatura.Domain.Models;
 using DesafioStoneTemperatura.TaskTemperature.Helpers;
+using DesafioStoneTemperatura.Domain.Models.Data;
 
 namespace DesafioStoneTemperatura.TaskTemperature
 {

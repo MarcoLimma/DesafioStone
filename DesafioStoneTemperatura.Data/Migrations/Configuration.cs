@@ -1,5 +1,6 @@
 namespace DesafioStoneTemperatura.Data.Migrations
 {
+    using Domain.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -26,6 +27,13 @@ namespace DesafioStoneTemperatura.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            //City city1 = new City(
+            //    new Guid(), ""
+            //    );
+
+            //context.Cities
+
         }
     }
 }

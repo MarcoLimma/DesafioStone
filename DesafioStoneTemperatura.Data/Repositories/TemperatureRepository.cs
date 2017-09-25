@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
-using DesafioStoneTemperatura.Domain.Models;
+using DesafioStoneTemperatura.Domain.Models.Data;
 
 namespace DesafioStoneTemperatura.Data.Repositories
 {

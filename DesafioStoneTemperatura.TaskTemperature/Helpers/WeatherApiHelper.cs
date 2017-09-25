@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Web.Script.Serialization;
-using DesafioStoneTemperatura.Domain.Models;
+using DesafioStoneTemperatura.Domain.Models.Data;
 
 namespace DesafioStoneTemperatura.TaskTemperature.Helpers
 {

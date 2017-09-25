@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 using DesafioStoneTemperatura.Data;
 using DesafioStoneTemperatura.Data.Repositories;
-using DesafioStoneTemperatura.Domain.Models;
+using DesafioStoneTemperatura.Domain.Models.Data;
 using DesafioStoneTemperatura.Helpers;
+using DesafioStoneTemperatura.Domain.Models.Api;
+using System;
 
 namespace DesafioStoneTemperatura.Controllers
 {
@@ -25,37 +24,62 @@ namespace DesafioStoneTemperatura.Controllers
         // GET /cities/{name}/temperature
         public object Get(string name)
         {
-            return cityRepo.GetTemperatures(name);
+            return cityRepo.GetTemperatures(name, 30);
         }
 
         [HttpPost]
         [Route("cities/{name}")]
         // POST /cities/{name}
-        public void Post(string name)
+        public BasicResponse Post(string name)
         {
-            cityRepo.Add(new City(name));
+            try
+            {
+                cityRepo.Add(new City(name));
+                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully added.", name));
+            }
+            catch (Exception e)
+            {
+                return new BasicResponse(Status.Error, e.ToString());
+            }
+            
         }
 
         [HttpDelete]
         [Route("cities/{name}")]
         // DELETE /cities/{name}
-        public void Delete(string name)
+        public BasicResponse Delete(string name)
         {
-            cityRepo.Remove(name);
+            try
+            {
+                cityRepo.Remove(name);
+                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully deleted.", name));
+            }
+            catch (Exception e)
+            {
+                return new BasicResponse(Status.Error, e.ToString());
+            }
         }
 
         [HttpDelete]
         [Route("cities/{name}/temperatures")]
         // DELETE /cities/{city_name}/temperatures
-        public void DeleteTemperatures(string name)
+        public BasicResponse DeleteTemperatures(string name)
         {
-            cityRepo.DeleteTemperatures(name);
+            try
+            {
+                cityRepo.DeleteTemperatures(name);
+                return new BasicResponse(Status.Success, String.Format("The temperature history of '{0}' was successfully deleted.", name));
+            }
+            catch (Exception e)
+            {
+                return new BasicResponse(Status.Error, e.ToString());
+            } 
         }
 
         [HttpGet]
         [Route("temperatures")]
         // GET /cities
-        public object GetBuTemperatures()
+        public object GetByTemperatures()
         {
             return cityRepo.GetLatestByTemperatureRegistered(1);
         }
@@ -63,7 +87,7 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpGet]
         [Route("temperatures/{page}")]
         // GET /cities
-        public object GetBuTemperatures(int page)
+        public object GetByTemperatures(int page)
         {
             return cityRepo.GetLatestByTemperatureRegistered(page);
         }
@@ -71,11 +95,18 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpPost]
         [Route("cities/by_cep/{cep}")]
         // POST /cities/by_cep/{cep}
-        public void PostByCep(string cep)
+        public BasicResponse PostByCep(string cep)
         {
-            string name = new CepHelper().GetCityName(cep);
-
-            cityRepo.Add(new City(name));
+            try
+            {
+                string name = new CepHelper().GetCityName(cep);
+                cityRepo.Add(new City(name));
+                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully added.", name));
+            }
+            catch (Exception e)
+            {
+                return new BasicResponse(Status.Error, e.ToString());
+            }
         }
     }
 }

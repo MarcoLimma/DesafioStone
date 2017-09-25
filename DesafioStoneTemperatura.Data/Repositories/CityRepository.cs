@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
-using DesafioStoneTemperatura.Domain.Models;
+using DesafioStoneTemperatura.Domain.Models.Data;
 
 namespace DesafioStoneTemperatura.Data.Repositories
 {
@@ -20,9 +17,8 @@ namespace DesafioStoneTemperatura.Data.Repositories
 
         public void Add(City city)
         {
-            //Todo: Nao deixar criar cidades com o mesmo nome
-            context.Cities.Add(city);
-            context.SaveChanges();
+                context.Cities.Add(city);
+                context.SaveChanges();
         }
 
         public void Remove(string name)
@@ -53,21 +49,22 @@ namespace DesafioStoneTemperatura.Data.Repositories
         }
 
         //ToDo: Criar modelos para serem  retornados no lugar de objects
-        public object GetTemperatures(string name)
+        public object GetTemperatures(string name, int listSize)
         {
             var city = context.Cities.FirstOrDefault(c => c.Name == name);
 
             if (city == null)
                 return null;
 
-            return new
-            {
-               city = city.Name,
-               temperatures = city.Temperatures.OrderByDescending(t => t.Date).Take(30).Select( t => new
-               {
-                   date = t.Date.ToString("yyyy-MM-dd HH:mm:ss"),
-                   temperature = t.Value
-               })
+            return new {
+                city = city.Name,
+                temperatures = city.Temperatures
+                    .OrderByDescending(t => t.Date)
+                    .Take(listSize)
+                    .Select( t => new {
+                        date = t.Date.ToString("yyyy-MM-dd HH:mm:ss"),
+                        temperature = t.Value
+                    })
             };
         }
 
@@ -88,13 +85,24 @@ namespace DesafioStoneTemperatura.Data.Repositories
         {
             int pageSize = 10;
 
-            object cities = context.Temperatures.OrderByDescending(t => t.Date).Select(t => t.City).Distinct()
-                .Select( c => new
-                {
-                    city = c.Name,
-                    temperature = c.Temperatures.OrderByDescending(t => t.Date).Select( t => t.Value).FirstOrDefault()
-                }).OrderByDescending(t => t.temperature).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
+            object cities = context.Temperatures
+                    //Pega as últimas temperaturas registradas
+                    .OrderByDescending(t => t.Date)
+                    //Seleciona as cidades dessas temperaturas, com distinct
+                    .Select(t => t.City).Distinct()
+                    .Select( c => new {
+                        city = c.Name,
+                        //Pega a última temperatura registrada da cidade
+                        temperature = c.Temperatures
+                            .OrderByDescending(t => t.Date)
+                            .Select( t => t.Value)
+                            .FirstOrDefault()
+                    })
+                    //Ordena as cidades pela temperatura e depois pagina
+                    .OrderByDescending(t => t.temperature)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
             return cities;
         }
