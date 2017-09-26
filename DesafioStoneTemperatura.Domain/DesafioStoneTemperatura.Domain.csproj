@@ -46,7 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Api\BasicResponse.cs" />
+    <Compile Include="Models\Api\CityDataContract.cs" />
+    <Compile Include="Models\Api\CityTemperatureDataContract.cs" />
+    <Compile Include="Models\Api\TemperatureDataContract.cs" />
     <Compile Include="Models\Data\City.cs" />
+    <Compile Include="Models\Data\Interfaces\ICityRepository.cs" />
+    <Compile Include="Models\Data\Interfaces\ITemperatureRepository.cs" />
     <Compile Include="Models\Data\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

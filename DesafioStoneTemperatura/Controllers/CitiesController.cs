@@ -5,13 +5,18 @@ using DesafioStoneTemperatura.Domain.Models.Data;
 using DesafioStoneTemperatura.Helpers;
 using DesafioStoneTemperatura.Domain.Models.Api;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Net;
+using System.Web.Http.Results;
+using DesafioStoneTemperatura.Domain.Models.Data.Interfaces;
 
 namespace DesafioStoneTemperatura.Controllers
 {
     public class CitiesController : ApiController
     {
         private DataContext context;
-        private CityRepository cityRepo;
+        private ICityRepository cityRepo;
 
         public CitiesController()
         {
@@ -19,10 +24,17 @@ namespace DesafioStoneTemperatura.Controllers
             this.cityRepo = new CityRepository(context);
         }
 
+
+        public CitiesController(ICityRepository _cityRepo)
+        {
+            this.context = new DataContext();
+            this.cityRepo = _cityRepo;
+        }
+
         [HttpGet]
         [Route("cities/{name}/temperatures")]
         // GET /cities/{name}/temperature
-        public object Get(string name)
+        public CityDataContract Get(string name)
         {
             return cityRepo.GetTemperatures(name, 30);
         }
@@ -30,16 +42,16 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpPost]
         [Route("cities/{name}")]
         // POST /cities/{name}
-        public BasicResponse Post(string name)
+        public IHttpActionResult Post(string name)
         {
             try
             {
                 cityRepo.Add(new City(name));
-                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully added.", name));
+                return Ok($"'{name}' was successfully added.");
             }
             catch (Exception e)
             {
-                return new BasicResponse(Status.Error, e.ToString());
+                return InternalServerError(e);
             }
             
         }
@@ -47,16 +59,20 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpDelete]
         [Route("cities/{name}")]
         // DELETE /cities/{name}
-        public BasicResponse Delete(string name)
+        public IHttpActionResult Delete(string name)
         {
             try
             {
                 cityRepo.Remove(name);
-                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully deleted.", name));
+                return Ok($"'{name}' was successfully deleted.");
+            }
+            catch (ObjectNotFoundException)
+            {
+                return NotFound();
             }
             catch (Exception e)
             {
-                return new BasicResponse(Status.Error, e.ToString());
+                return InternalServerError(e);
             }
         }
 
@@ -68,7 +84,8 @@ namespace DesafioStoneTemperatura.Controllers
             try
             {
                 cityRepo.DeleteTemperatures(name);
-                return new BasicResponse(Status.Success, String.Format("The temperature history of '{0}' was successfully deleted.", name));
+                return new BasicResponse(Status.Success,
+                    $"The temperature history of '{name}' was successfully deleted.");
             }
             catch (Exception e)
             {
@@ -79,7 +96,7 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpGet]
         [Route("temperatures")]
         // GET /cities
-        public object GetByTemperatures()
+        public List<CityTemperatureDataContract> GetByTemperatures()
         {
             return cityRepo.GetLatestByTemperatureRegistered(1);
         }
@@ -87,7 +104,7 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpGet]
         [Route("temperatures/{page}")]
         // GET /cities
-        public object GetByTemperatures(int page)
+        public List<CityTemperatureDataContract> GetByTemperatures(int page)
         {
             return cityRepo.GetLatestByTemperatureRegistered(page);
         }
@@ -101,7 +118,7 @@ namespace DesafioStoneTemperatura.Controllers
             {
                 string name = new CepHelper().GetCityName(cep);
                 cityRepo.Add(new City(name));
-                return new BasicResponse(Status.Success, String.Format("'{0}' was successfully added.", name));
+                return new BasicResponse(Status.Success, $"'{name}' was successfully added.");
             }
             catch (Exception e)
             {

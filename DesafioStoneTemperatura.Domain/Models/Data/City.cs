@@ -24,7 +24,6 @@ namespace DesafioStoneTemperatura.Domain.Models.Data
 
         public Guid Id { get; set; }
 
-        [StringLength(250)]
         public string Name { get; set; }
 
         public virtual List<Temperature> Temperatures { get; set; }

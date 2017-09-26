@@ -5,10 +5,11 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using DesafioStoneTemperatura.Domain.Models.Data;
+using DesafioStoneTemperatura.Domain.Models.Data.Interfaces;
 
 namespace DesafioStoneTemperatura.Data.Repositories
 {
-    public class TemperatureRepository
+    public class TemperatureRepository : ITemperatureRepository
     {
         private DataContext context;
 

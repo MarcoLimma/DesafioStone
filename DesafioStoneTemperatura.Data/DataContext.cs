@@ -13,8 +13,8 @@ namespace DesafioStoneTemperatura.Data
 {
     public class DataContext : DbContext
     {
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Temperature> Temperatures { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Temperature> Temperatures { get; set; }
 
         public DataContext() : base("DefaultConnection")
         {
