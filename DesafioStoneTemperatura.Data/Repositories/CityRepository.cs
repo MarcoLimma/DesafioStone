@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Linq;
-using DesafioStoneTemperatura.Data.Migrations;
 using DesafioStoneTemperatura.Domain.Models.Api;
 using DesafioStoneTemperatura.Domain.Models.Data;
 using DesafioStoneTemperatura.Domain.Models.Data.Interfaces;

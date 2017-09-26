@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Api\BasicResponse.cs" />
     <Compile Include="Models\Api\CityDataContract.cs" />
     <Compile Include="Models\Api\CityTemperatureDataContract.cs" />
     <Compile Include="Models\Api\TemperatureDataContract.cs" />

@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\JsonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CityRepositoryTests.cs" />
     <Compile Include="Repositories\TemperatureRepositoryTests.cs" />
@@ -125,6 +126,10 @@
     <ProjectReference Include="..\DesafioStoneTemperatura.Domain\DesafioStoneTemperatura.Domain.csproj">
       <Project>{6A0CBB81-54C9-4584-8B1C-7894D215823E}</Project>
       <Name>DesafioStoneTemperatura.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DesafioStoneTemperatura.TaskTemperature\DesafioStoneTemperatura.TaskTemperature.csproj">
+      <Project>{0C3EADAD-10EC-4E44-909B-76358FAE3BB7}</Project>
+      <Name>DesafioStoneTemperatura.TaskTemperature</Name>
     </ProjectReference>
     <ProjectReference Include="..\DesafioStoneTemperatura\DesafioStoneTemperatura.Api.csproj">
       <Project>{35E78B0E-7B8F-4FE9-A374-9D7B74D7755F}</Project>

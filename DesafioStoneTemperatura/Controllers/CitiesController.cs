@@ -7,8 +7,6 @@ using DesafioStoneTemperatura.Domain.Models.Api;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
-using System.Net;
-using System.Web.Http.Results;
 using DesafioStoneTemperatura.Domain.Models.Data.Interfaces;
 
 namespace DesafioStoneTemperatura.Controllers
@@ -79,17 +77,20 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpDelete]
         [Route("cities/{name}/temperatures")]
         // DELETE /cities/{city_name}/temperatures
-        public BasicResponse DeleteTemperatures(string name)
+        public IHttpActionResult DeleteTemperatures(string name)
         {
             try
             {
                 cityRepo.DeleteTemperatures(name);
-                return new BasicResponse(Status.Success,
-                    $"The temperature history of '{name}' was successfully deleted.");
+                return Ok($"The temperature history of '{name}' was successfully deleted.");
+            }
+            catch (ObjectNotFoundException)
+            {
+                return NotFound();
             }
             catch (Exception e)
             {
-                return new BasicResponse(Status.Error, e.ToString());
+                return InternalServerError(e);
             } 
         }
 
@@ -112,17 +113,17 @@ namespace DesafioStoneTemperatura.Controllers
         [HttpPost]
         [Route("cities/by_cep/{cep}")]
         // POST /cities/by_cep/{cep}
-        public BasicResponse PostByCep(string cep)
+        public IHttpActionResult PostByCep(string cep)
         {
             try
             {
                 string name = new CepHelper().GetCityName(cep);
                 cityRepo.Add(new City(name));
-                return new BasicResponse(Status.Success, $"'{name}' was successfully added.");
+                return Ok($"'{name}' was successfully added.");
             }
             catch (Exception e)
             {
-                return new BasicResponse(Status.Error, e.ToString());
+                return InternalServerError(e);
             }
         }
     }

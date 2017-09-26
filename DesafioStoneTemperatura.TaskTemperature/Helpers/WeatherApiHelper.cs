@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Web.Script.Serialization;
 using DesafioStoneTemperatura.Domain.Models.Data;
+using Newtonsoft.Json;
 
 namespace DesafioStoneTemperatura.TaskTemperature.Helpers
 {
@@ -22,14 +22,11 @@ namespace DesafioStoneTemperatura.TaskTemperature.Helpers
                 StreamReader reader = new StreamReader(dataStream);
                 string responseFromServer = reader.ReadToEnd();
                     
-                //ToDo: Testar a velocidade dos conversores de json
-                JavaScriptSerializer j = new JavaScriptSerializer();
-                var responseObject = j.Deserialize<Dictionary<string, object>>(responseFromServer);
+                var responseObject = JsonConvert.DeserializeObject<ResponseObject>(responseFromServer);
 
-                //ToDo: Tratar o caso de nao ter a cidade na API de clima
-                var results = responseObject["results"];
+                var results = responseObject.results;
 
-                var temperature = ((Dictionary<string, object>)results)["temp"];
+                var temperature = results.temp;
 
                 Console.WriteLine(responseFromServer);
                 reader.Close();
@@ -42,6 +39,45 @@ namespace DesafioStoneTemperatura.TaskTemperature.Helpers
             {
                 throw new Exception("Error on access the weather api. Exception: " + e);
             }
+        }
+
+        private class Forecast
+        {
+            public string date { get; set; }
+            public string weekday { get; set; }
+            public string max { get; set; }
+            public string min { get; set; }
+            public string description { get; set; }
+            public string condition { get; set; }
+        }
+
+        private class Results
+        {
+            public int temp { get; set; }
+            public string date { get; set; }
+            public string time { get; set; }
+            public string condition_code { get; set; }
+            public string description { get; set; }
+            public string currently { get; set; }
+            public string cid { get; set; }
+            public string city { get; set; }
+            public string img_id { get; set; }
+            public string humidity { get; set; }
+            public string wind_speedy { get; set; }
+            public string sunrise { get; set; }
+            public string sunset { get; set; }
+            public string condition_slug { get; set; }
+            public string city_name { get; set; }
+            public List<Forecast> forecast { get; set; }
+        }
+
+        private class ResponseObject
+        {
+            public string by { get; set; }
+            public bool valid_key { get; set; }
+            public Results results { get; set; }
+            public double execution_time { get; set; }
+            public bool from_cache { get; set; }
         }
     }
 }
