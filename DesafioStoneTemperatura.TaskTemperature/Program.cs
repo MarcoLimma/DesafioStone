@@ -10,19 +10,17 @@ namespace DesafioStoneTemperatura.TaskTemperature
     {
         static void Main(string[] args)
         {
-            DataContext context = new DataContext();
-            CityRepository cityRepo = new CityRepository(context);
-            TemperatureRepository temperatureRepo = new TemperatureRepository(context);
+            var context = new DataContext();
+            var cityRepo = new CityRepository(context);
+            var temperatureRepo = new TemperatureRepository(context);
 
             List<City> cities = cityRepo.GetAll();
-
-          
+            
             if (cities.Count > 0)
             {
                 foreach (var city in cities)
                 {
-                    WeatherApiHelper temperatureApi = new WeatherApiHelper();
-                    Temperature temperature = temperatureApi.GetTemperature(city);
+                    var temperature = WeatherApiHelper.GetTemperature(city);
 
                     temperatureRepo.Add(temperature);
                 }

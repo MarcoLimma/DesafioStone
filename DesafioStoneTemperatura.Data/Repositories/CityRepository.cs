@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Core;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace DesafioStoneTemperatura.Data.Repositories
     {
         private readonly DataContext context;
 
-        public CityRepository(DataContext _context)
+        public CityRepository(DataContext context)
         {
-            this.context = _context;
+            this.context = context;
         }
 
         public CityRepository()
@@ -48,15 +49,17 @@ namespace DesafioStoneTemperatura.Data.Repositories
 
         public City GetByName(string name)
         {
-            return context.Cities.FirstOrDefault(city => city.Name == name);
+            return context.Cities.FirstOrDefault(city => string.Equals(city.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public CityDataContract GetTemperatures(string name, int listSize)
         {
-            var city = context.Cities.FirstOrDefault(c => c.Name == name);
+            var city = GetByName(name);
 
             if (city == null)
-                return null;
+            {
+                throw new ObjectNotFoundException();
+            }
 
             return new CityDataContract()
             {
@@ -84,11 +87,11 @@ namespace DesafioStoneTemperatura.Data.Repositories
             context.Temperatures.RemoveRange(city.Temperatures);
             context.SaveChanges();
         }
-
-
+        
         public List<CityTemperatureDataContract> GetLatestByTemperatureRegistered(int page)
         {
-            int pageSize = int.Parse(ConfigurationManager.AppSettings["PageSize"]);
+            var pageSize = 10;
+            int.TryParse(ConfigurationManager.AppSettings["PageSize"], out pageSize);
 
             return context.Temperatures
                     //Pega as últimas temperaturas registradas
@@ -112,5 +115,3 @@ namespace DesafioStoneTemperatura.Data.Repositories
         }
     }
 }
-
-

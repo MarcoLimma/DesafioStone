@@ -33,7 +33,6 @@ namespace DesafioStoneTemperatura.Tests.Helpers
         {
             var responseObject = JsonConverter1(responseFromServer);
             //testar a velocidade em que o teste foi executado
-
         }
 
         [TestMethod()]
@@ -42,7 +41,6 @@ namespace DesafioStoneTemperatura.Tests.Helpers
             var responseObject = JsonConverter2(responseFromServer);
             //testar a velocidade em que o teste foi executado
         }
-
 
         public Dictionary<string, object> JsonConverter1(string json)
         {

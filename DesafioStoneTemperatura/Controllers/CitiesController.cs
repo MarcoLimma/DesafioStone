@@ -13,33 +13,41 @@ namespace DesafioStoneTemperatura.Controllers
 {
     public class CitiesController : ApiController
     {
-        private DataContext context;
         private ICityRepository cityRepo;
 
         public CitiesController()
         {
-            this.context = new DataContext();
+            var context = new DataContext();
             this.cityRepo = new CityRepository(context);
         }
 
-
         public CitiesController(ICityRepository _cityRepo)
         {
-            this.context = new DataContext();
             this.cityRepo = _cityRepo;
         }
 
+        // GET /cities/{name}/temperature
         [HttpGet]
         [Route("cities/{name}/temperatures")]
-        // GET /cities/{name}/temperature
-        public CityDataContract Get(string name)
+        public IHttpActionResult Get(string name)
         {
-            return cityRepo.GetTemperatures(name, 30);
+            try
+            {
+                return Ok(cityRepo.GetTemperatures(name, 30));
+            }
+            catch (ObjectNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
+        // POST /cities/{name}
         [HttpPost]
         [Route("cities/{name}")]
-        // POST /cities/{name}
         public IHttpActionResult Post(string name)
         {
             try
@@ -51,12 +59,11 @@ namespace DesafioStoneTemperatura.Controllers
             {
                 return InternalServerError(e);
             }
-            
         }
 
+        // DELETE /cities/{name}
         [HttpDelete]
         [Route("cities/{name}")]
-        // DELETE /cities/{name}
         public IHttpActionResult Delete(string name)
         {
             try
@@ -74,9 +81,9 @@ namespace DesafioStoneTemperatura.Controllers
             }
         }
 
+        // DELETE /cities/{city_name}/temperatures
         [HttpDelete]
         [Route("cities/{name}/temperatures")]
-        // DELETE /cities/{city_name}/temperatures
         public IHttpActionResult DeleteTemperatures(string name)
         {
             try
@@ -91,33 +98,39 @@ namespace DesafioStoneTemperatura.Controllers
             catch (Exception e)
             {
                 return InternalServerError(e);
-            } 
+            }
         }
 
+        // GET /temperatures
         [HttpGet]
         [Route("temperatures")]
-        // GET /cities
         public List<CityTemperatureDataContract> GetByTemperatures()
         {
             return cityRepo.GetLatestByTemperatureRegistered(1);
         }
 
+        // GET /temperatures/{page}
         [HttpGet]
         [Route("temperatures/{page}")]
-        // GET /cities
         public List<CityTemperatureDataContract> GetByTemperatures(int page)
         {
             return cityRepo.GetLatestByTemperatureRegistered(page);
         }
 
+        // POST /cities/by_cep/{cep}
         [HttpPost]
         [Route("cities/by_cep/{cep}")]
-        // POST /cities/by_cep/{cep}
         public IHttpActionResult PostByCep(string cep)
         {
             try
             {
-                string name = new CepHelper().GetCityName(cep);
+                var name = CepHelper.GetCityName(cep);
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    return NotFound();
+                }
+
                 cityRepo.Add(new City(name));
                 return Ok($"'{name}' was successfully added.");
             }

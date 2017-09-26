@@ -5,28 +5,26 @@ using Newtonsoft.Json;
 
 namespace DesafioStoneTemperatura.Helpers
 {
-    public class CepHelper
+    public static class CepHelper
     {
-        public string GetCityName(string cep)
+        public static string GetCityName(string cep)
         {
             try
             {
                 string url = String.Format("https://viacep.com.br/ws/{0}/json/", cep);
 
-                WebRequest request = WebRequest.Create(url);
-                WebResponse response = request.GetResponse();
-                Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
+                var request = WebRequest.Create(url);
+                var response = request.GetResponse();
+                var dataStream = response.GetResponseStream();
+                var reader = new StreamReader(dataStream);
                 string responseFromServer = reader.ReadToEnd();
-
                 var responseObject = JsonConvert.DeserializeObject<ResponseObject>(responseFromServer);
 
                 return responseObject.localidade ?? "";
             }
             catch (Exception e)
             {
-                throw new Exception("Error on access the weather api. Exception: " + e);
+                throw new Exception("Error accessing the weather api. Exception: " + e);
             }
         }
 
